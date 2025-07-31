@@ -18,8 +18,8 @@ import com.dstarking.aicodeagent.model.vo.LoginUserVO;
 import com.dstarking.aicodeagent.model.vo.UserVO;
 import com.dstarking.aicodeagent.service.UserService;
 import com.mybatisflex.core.paginate.Page;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
     //用户注册
