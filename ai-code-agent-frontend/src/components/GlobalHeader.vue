@@ -6,7 +6,7 @@
         <RouterLink to="/">
           <div class="header-left">
             <img class="logo" src="@/assets/logo.png" alt="Logo" />
-            <h1 class="site-title">AI-Code-Agent</h1>
+            <h1 class="site-title">鱼皮应用生成</h1>
           </div>
         </RouterLink>
       </a-col>
@@ -51,28 +51,11 @@
 import { computed, h, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { type MenuProps, message } from 'ant-design-vue'
-
-// JS 中引入 Store
 import { useLoginUserStore } from '@/stores/loginUser.ts'
-import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
 import { userLogout } from '@/api/userController.ts'
-
-// 用户注销
-const doLogout = async () => {
-  const res = await userLogout()
-  if (res.data.code === 0) {
-    loginUserStore.setLoginUser({
-      userName: '未登录',
-    })
-    message.success('退出登录成功')
-    await router.push('/user/login')
-  } else {
-    message.error('退出登录失败，' + res.data.message)
-  }
-}
+import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
 
 const loginUserStore = useLoginUserStore()
-
 const router = useRouter()
 // 当前选中菜单
 const selectedKeys = ref<string[]>(['/'])
@@ -81,7 +64,6 @@ router.afterEach((to, from, next) => {
   selectedKeys.value = [to.path]
 })
 
-// 菜单配置项
 // 菜单配置项
 const originItems = [
   {
@@ -94,6 +76,11 @@ const originItems = [
     key: '/admin/userManage',
     label: '用户管理',
     title: '用户管理',
+  },
+  {
+    key: '/admin/appManage',
+    label: '应用管理',
+    title: '应用管理',
   },
   {
     key: 'others',
@@ -119,7 +106,6 @@ const filterMenus = (menus = [] as MenuProps['items']) => {
 // 展示在菜单的路由数组
 const menuItems = computed<MenuProps['items']>(() => filterMenus(originItems))
 
-
 // 处理菜单点击
 const handleMenuClick: MenuProps['onClick'] = (e) => {
   const key = e.key as string
@@ -127,6 +113,20 @@ const handleMenuClick: MenuProps['onClick'] = (e) => {
   // 跳转到对应页面
   if (key.startsWith('/')) {
     router.push(key)
+  }
+}
+
+// 退出登录
+const doLogout = async () => {
+  const res = await userLogout()
+  if (res.data.code === 0) {
+    loginUserStore.setLoginUser({
+      userName: '未登录',
+    })
+    message.success('退出登录成功')
+    await router.push('/user/login')
+  } else {
+    message.error('退出登录失败，' + res.data.message)
   }
 }
 </script>

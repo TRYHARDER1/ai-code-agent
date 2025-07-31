@@ -1,8 +1,8 @@
 package com.dstarking.aicodeagent.core.saver;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.dstarking.aicodeagent.constant.AppConstant;
 import com.dstarking.aicodeagent.exception.BusinessException;
 import com.dstarking.aicodeagent.exception.ErrorCode;
 import com.dstarking.aicodeagent.model.enums.CodeGenTypeEnum;
@@ -12,15 +12,15 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class CodeFileSaverTemplate<T> {
     //文件保存路径
-    private static final String FILE_SAVE_ROOT_DIR = System.getProperty("user.dir") + "/tmp/code_output/";
+    private static final String FILE_SAVE_ROOT_DIR = AppConstant.CODE_OUTPUT_ROOT_DIR;
 
 
 
-    public final File saveCode(T result){
+    public final File saveCode(T result, Long appId) {
         //验证输入
         validateInput(result);
         //构建唯一目录
-        String baseDirPath = buildUniqueDir();
+        String baseDirPath = buildUniqueDir(appId);
         //保存文件
         saveFiles(result, baseDirPath);
         //返回文件目录对象
@@ -41,9 +41,12 @@ public abstract class CodeFileSaverTemplate<T> {
         }
     }
 
-    private String buildUniqueDir(){
+    private String buildUniqueDir(Long appId){
+        if (appId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "应用ID不能为空");
+        }
         String codeType = getCodeType().getValue();
-        String uniqueDirName = StrUtil.format("{}_{}", codeType, IdUtil.getSnowflakeNextIdStr());
+        String uniqueDirName = StrUtil.format("{}_{}", codeType, appId);
         String dirPath = FILE_SAVE_ROOT_DIR + File.separator + uniqueDirName;
         FileUtil.mkdir(dirPath);
         return dirPath;

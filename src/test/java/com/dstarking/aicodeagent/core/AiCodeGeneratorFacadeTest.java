@@ -18,13 +18,13 @@ class AiCodeGeneratorFacadeTest {
 
     @Test
     void generateAndSaveCode() {
-        File file = aiCodeGeneratorFacade.generateAndSaveCode("生成一个简单的HTML页面", CodeGenTypeEnum.HTML);
+        File file = aiCodeGeneratorFacade.generateAndSaveCode("生成一个简单的HTML页面", CodeGenTypeEnum.HTML, 1L);
         Assertions.assertNotNull(file, "生成的文件不应为null");
     }
 
     @Test
     void generateAndSaveCodeStream() {
-        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("生成一个简单的HTML页面", CodeGenTypeEnum.HTML);
+        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("生成一个简单的HTML页面", CodeGenTypeEnum.HTML, 1L);
         List<String> block = codeStream.collectList().block();
         Assertions.assertNotNull(block, "代码流不应为null");
         String completeContent = String.join("", block);
