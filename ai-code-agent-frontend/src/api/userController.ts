@@ -80,7 +80,7 @@ export async function listUserVoByPage(
 }
 
 /** 此处后端没有提供注释 POST /user/login */
-export async function userLogin(body: API.UserLoginRequest, options?: { [key: string]: any }) {
+export async function userLogin(body: API.UserRegisterRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO>('/user/login', {
     method: 'POST',
     headers: {
